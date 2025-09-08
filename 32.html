@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="bday.png" />
+  <title>happy birthday hanahku!</title>
+  <link rel="icon" href="https://i.ibb.co.com/hXZsYxZ/heart.png">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #ffffff;
+      color: #1e3a8a;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+    }
+
+    .page {
+      height: 100vh;
+      width: 100vw;
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease;
+    }
+
+    .page.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .highlight {
+      color: #1e3a8a;
+      font-weight: bold;
+    }
+
+    .button {
+      background-color: #1e3a8a;
+      color: #fff;
+      border: none;
+      border-radius: 25px;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      margin-top: 30px;
+      transition: background 0.3s;
+    }
+
+    .button:hover {
+      background-color: #2c4ca5;
+    }
+
+    img {
+      max-width: 70vw;
+      max-height: 50vh;
+      margin-bottom: 20px;
+    }
+
+    .letter {
+      white-space: pre-line;
+      font-size: 1.1rem;
+      max-width: 600px;
+      text-align: left;
+      border-left: 3px solid #ff7fd6;
+      padding-left: 15px;
+      min-height: 200px;
+    }
+
+    .falling {
+      position: fixed;
+      top: -30px;
+      font-size: 24px;
+      animation: fall linear infinite;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    .blue-heart {
+      color: #ff8dca;
+    }
+
+    .yellow-star {
+      color: #facc15;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(120vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+      }
+
+      .button {
+        padding: 10px 20px;
+        font-size: 1rem;
+      }
+
+      .letter {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page active" id="page1">
+    <img src="1.gif" alt="Cute Icon" />
+    <h1>Happy Birthday <span class="highlight">Hanahku Sayang ♡</span></h1>
+    <p>your next surprise is just a click away ✨</p>
+    <button class="button" onclick="goToPage(2)">tap ‹𝟹</button>
+  </div>
+
+  <div class="page" id="page2">
+    <img src="write.gif" alt="Envelope" />
+    <p>knock knock Hai sayang i love you so much baby and i hope you know that hihihi,
+      please open this letter sayang ble! ( ∩´͈ ᐜ `͈∩)</p>
+    <button class="button" onclick="goToPage(3)">open it ‹𝟹</button>
+  </div>
+
+<div class="page" id="page3" style="font-family: 'Dancing Script', cursive;">
+    <h2>My small lil baby, Faatin Farhanah <𝟑 .ᐟ </h2>
+    <div class="letter" id="letterText"></div>
+</div>
+
+  <audio id="bg-music" src="Party.mp4" autoplay loop muted></audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    const fullLetter = `Dear Hanahku, 
+
+    happy birthday to the soul who makes my world brighter than any sunrise.! 
+
+When I look at you, I see every dream I have ever wished for, quietly woven into reality.You are my safe place, my spark, my forever.You are the reason my days feel brighter. You make me laugh until my cheeks hurt and you make life feel like the sweetest adventure.I hope you feel all the love you deserve sayang because honestly you are the best part of my story.
+
+You are my favorite poem written in laughter, my favorite song sung in whispers. Every smile of yours is sunlight every touch is home. With you, the ordinary turns magical sayang every hang out, late night talks,
+  even silence feels full of meaning when it is with you.
+
+If I could, I would wrap up the whole universe and place it in your hands, just to show how much you mean to me. But instead, I will give you this my love endless and unwavering, in every tomorrow we share.
+
+Once again happy birthday my darling , i love you so much and endlessly sayang more than you do :p
+
+Yours always and forever,
+𝜗𝜚 MD HANIFF SAFWAN ;`
+
+    function goToPage(pageNum) {
+      const pages = document.querySelectorAll('.page');
+      pages.forEach(p => p.classList.remove('active'));
+      const next = document.getElementById(`page${pageNum}`);
+      next.classList.add('active');
+
+      if (pageNum === 3) {
+        const music = document.getElementById("bg-music");
+        music.muted = false;
+        music.play().catch(e => console.log("Autoplay blocked:", e));
+
+        confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+        typeText(fullLetter, document.getElementById('letterText'), 25);
+        startFallingSymbols();
+      }
+    }
+
+    function typeText(text, element, speed) {
+      element.innerHTML = '';
+      let i = 0;
+      function type() {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        }
+      }
+      type();
+    }
+
+    function startFallingSymbols() {
+      setInterval(() => {
+        const el = document.createElement('div');
+        el.classList.add('falling');
+        const isHeart = Math.random() < 0.5;
+        el.innerText = isHeart ? '💙' : '⭐';
+        el.classList.add(isHeart ? 'blue-heart' : 'yellow-star');
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.animationDuration = (3 + Math.random() * 2) + 's';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 6000);
+      }, 300);
+    }
+  </script>
+</body>
+</html>
